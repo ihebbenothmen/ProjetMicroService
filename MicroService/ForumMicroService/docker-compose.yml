@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  eureka:
+    build: C:\Users\hkiri\OneDrive\Bureau\Esprit\Microservices\EurekaServer
+    ports:
+      - "8761:8761"
+    volumes:
+      - C:\Users\hkiri\OneDrive\Bureau\Esprit\Microservices\EurekaServer\target:/app
+
+  forumservice:
+    build: C:\Users\hkiri\IdeaProjects\ForumService
+    ports:
+      - "8090:8090"
+    links:
+      - eureka
+    depends_on:
+      - eureka
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+
+  apigateway:
+    build: C:\Users\hkiri\OneDrive\Bureau\Esprit\Microservices\ApiGateway
+    ports:
+      - "8081:8081"
+    links:
+      - eureka
+    depends_on:
+      - eureka
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
